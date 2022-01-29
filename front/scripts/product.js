@@ -37,8 +37,13 @@ function GetProduct()
 
        
     })
-
 }
+
+
+
+
+
+
 
 
 document.addEventListener("load", GetProduct());
