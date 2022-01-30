@@ -1,6 +1,8 @@
 let parametres = new URL(document.location).searchParams;    //?id=8906dfda133f4c20a9d0e34f18adcf06
 let productId = parametres.get('id'); //8906dfda133f4c20a9d0e34f18adcf06
 
+
+
 function GetProduct()
 {
     fetch(`http://localhost:3000/api/products/${productId}`)
@@ -14,7 +16,9 @@ function GetProduct()
 
         let itemImg = document.getElementById('product_img');
         let productImg = document.createElement("img");
+        productImg.id = "pImage";
         productImg.src = product.imageUrl;
+        productImg.alt = product.altTxt;
         itemImg.appendChild(productImg);
 
         let itemName = document.getElementById('title') ;         
@@ -39,12 +43,28 @@ function GetProduct()
     })
 }
 
+function addToCart(){
 
+    let selectColor = document.getElementById('colors');   // récupérer l'élément html select
+    let indexColor = selectColor.selectedIndex;  // récupérer l'index de l'option choisie
 
+    let color = selectColor[indexColor].value;  // récupérer la valeur de l'option choisie
+    
+    let productInformations = {
+        pId : productId,
+        pName : document.getElementById('title').innerHTML,
+        pImgUrl : document.getElementById('pImage').src,
+        pImgAlt : document.getElementById('pImage').alt,
+        pPrice : document.getElementById('price').innerText,
+        pQuantity : document.getElementById('quantity').value,
+        pColor : color        
+    };
 
+    localStorage.setItem(productInformations.pId, JSON.stringify(productInformations));
 
-
-
+    // console.log(productInformations);   
+}
 
 document.addEventListener("load", GetProduct());
+document.getElementById("addToCart").addEventListener("click", addToCart);
 
