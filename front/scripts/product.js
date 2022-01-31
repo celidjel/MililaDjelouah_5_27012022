@@ -22,7 +22,7 @@ function GetProduct()
         itemImg.appendChild(productImg);
 
         let itemName = document.getElementById('title') ;         
-        itemName.innerHTML = product.name;
+        itemName.innerText = product.name;
         
         let itemPrice = document.getElementById('price');
         itemPrice.innerText = product.price;
@@ -45,24 +45,47 @@ function GetProduct()
 
 function addToCart(){
 
+     let storedProducts = JSON.parse(localStorage.getItem("products")); // Récupérer la liste des produits présents dans le localstorage     
+
     let selectColor = document.getElementById('colors');   // récupérer l'élément html select
     let indexColor = selectColor.selectedIndex;  // récupérer l'index de l'option choisie
 
-    let color = selectColor[indexColor].value;  // récupérer la valeur de l'option choisie
+    let color = selectColor[indexColor].value;  // récupérer la valeur de l'option choisie   
     
-    let productInformations = {
-        pId : productId,
-        pName : document.getElementById('title').innerHTML,
-        pImgUrl : document.getElementById('pImage').src,
-        pImgAlt : document.getElementById('pImage').alt,
-        pPrice : document.getElementById('price').innerText,
+    let product = {
+        pId : productId,       
         pQuantity : document.getElementById('quantity').value,
         pColor : color        
     };
 
-    localStorage.setItem(productInformations.pId, JSON.stringify(productInformations));
+    let productsArray = [];
 
-    // console.log(productInformations);   
+    if(storedProducts === null)
+    {
+        productsArray.push(product);
+        localStorage.setItem("products", JSON.stringify(productsArray));
+    }
+    else
+    {  
+        productsArray = storedProducts;
+        let productExists = false;    
+        for(let i = 0 ; i < productsArray.length ; i++)
+        {
+            if(productsArray[i].pId === product.pId && productsArray[i].pColor === product.pColor)
+            {
+                productsArray[i].pQuantity = parseInt(productsArray[i].pQuantity) + parseInt(product.pQuantity);
+                productExists = true;                
+                break;
+            }
+        }  
+        
+        if(productExists === false)
+        {
+            productsArray.push(product);            
+        }
+
+        localStorage.setItem("products", JSON.stringify(productsArray));        
+    } 
 }
 
 document.addEventListener("load", GetProduct());
