@@ -15,8 +15,7 @@ function GetProduct()
     .then (function(product){      
 
         let itemImg = document.getElementById('product_img');
-        let productImg = document.createElement("img");
-        productImg.id = "pImage";
+        let productImg = document.createElement("img");        
         productImg.src = product.imageUrl;
         productImg.alt = product.altTxt;
         itemImg.appendChild(productImg);
@@ -30,8 +29,7 @@ function GetProduct()
         let itemdescription = document.getElementById('description');
         itemdescription.innerText = product.description;
         
-        let itemcolors = document.getElementById('colors') ;         
-        
+        let itemcolors = document.getElementById('colors') ;  
         for(let i = 0; i < product.colors.length; i++){
             let productColor = document.createElement("option") ;
             productColor.innerText = product.colors[i];
@@ -58,22 +56,20 @@ function addToCart(){
         pColor : color        
     };
 
-    let productsArray = [];
-
     if(storedProducts === null)
     {
+        let productsArray = [];
         productsArray.push(product);
-        localStorage.setItem("products", JSON.stringify(productsArray));
+        localStorage.setItem("products", JSON.stringify(productsArray)); // on stocke dans le localstorage
     }
     else
     {  
-        productsArray = storedProducts;
         let productExists = false;    
-        for(let i = 0 ; i < productsArray.length ; i++)
+        for(let i = 0 ; i < storedProducts.length ; i++)
         {
-            if(productsArray[i].pId === product.pId && productsArray[i].pColor === product.pColor)
+            if(product.pId === storedProducts[i].pId && product.pColor === storedProducts[i].pColor)
             {
-                productsArray[i].pQuantity = parseInt(productsArray[i].pQuantity) + parseInt(product.pQuantity);
+                storedProducts[i].pQuantity = parseInt(storedProducts[i].pQuantity) + parseInt(product.pQuantity);
                 productExists = true;                
                 break;
             }
@@ -81,10 +77,10 @@ function addToCart(){
         
         if(productExists === false)
         {
-            productsArray.push(product);            
-        }
+            storedProducts.push(product);            
+        } 
 
-        localStorage.setItem("products", JSON.stringify(productsArray));        
+        localStorage.setItem("products", JSON.stringify(storedProducts));        
     } 
 }
 
