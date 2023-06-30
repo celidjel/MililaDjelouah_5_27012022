@@ -112,7 +112,6 @@ function GetCart() {
                         //Suppression de l'article du DOM
                         paragraphDelete.closest(".cart__item").remove();
                         //Mise à jour du total avec la nouvelle quantité et le nouveau prix total
-                        //Mise à jour du local storage
                         UpdateTotal(storedProducts, productsPrice);
                     }); 
 
@@ -196,7 +195,7 @@ function Order(event) {
         emailErrorMsg.innerHTML = "veuillez entrer une adresse mail valide !";
     }
 
-    if (firstNameIsValid && lastNameIsValid && addressIsValid && cityIsValid && emailIsValid) {
+    if (firstNameIsValid && lastNameIsValid && addressIsValid && cityIsValid && emailIsValid && storedProducts !== null) {
         let contact = {
             firstName: firstname,
             lastName: lastname,
@@ -226,6 +225,7 @@ function Order(event) {
         })
             .then(result => result.json())
             .then(order => {
+                localStorage.removeItem("products");
                 window.location.href = "confirmation.html?id=" + order.orderId;
             });
     }
