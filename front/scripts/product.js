@@ -49,39 +49,45 @@ function addToCart(){
     let indexColor = selectColor.selectedIndex;  // récupérer l'index de l'option choisie
 
     let color = selectColor[indexColor].value;  // récupérer la valeur de l'option choisie   
-    
-    let product = {
-        pId : productId,       
-        pQuantity : document.getElementById('quantity').value,
-        pColor : color        
-    };
+    let productQuantity = document.getElementById('quantity').value;
 
-    if(storedProducts === null)
-    {
-        let productsArray = [];
-        productsArray.push(product);
-        localStorage.setItem("products", JSON.stringify(productsArray)); // on stocke dans le localstorage
-    }
-    else
-    {  
-        let productExists = false;    
-        for(let i = 0 ; i < storedProducts.length ; i++)
-        {
-            if(product.pId === storedProducts[i].pId && product.pColor === storedProducts[i].pColor)
-            {
-                storedProducts[i].pQuantity = parseInt(storedProducts[i].pQuantity) + parseInt(product.pQuantity);
-                productExists = true;                
-                break;
-            }
-        }  
+    // Si on a pas selectionné la couleur et la quantité on ajoute pas le produit au panier
+    if(color !== "" &&  parseInt(productQuantity) > 0){
+        let product = {
+            pId : productId,       
+            pQuantity : productQuantity,
+            pColor : color        
+        };
         
-        if(productExists === false)
+    
+        if(storedProducts === null)
         {
-            storedProducts.push(product);            
-        } 
-
-        localStorage.setItem("products", JSON.stringify(storedProducts));        
-    } 
+            let productsArray = [];
+            productsArray.push(product);
+            localStorage.setItem("products", JSON.stringify(productsArray)); // on stocke dans le localstorage
+        }
+        else
+        {  
+            let productExists = false;    
+            for(let i = 0 ; i < storedProducts.length ; i++)
+            {
+                if(product.pId === storedProducts[i].pId && product.pColor === storedProducts[i].pColor)
+                {
+                    storedProducts[i].pQuantity = parseInt(storedProducts[i].pQuantity) + parseInt(product.pQuantity);
+                    productExists = true;                
+                    break;
+                }
+            }  
+            
+            if(productExists === false)
+            {
+                storedProducts.push(product);            
+            } 
+    
+            localStorage.setItem("products", JSON.stringify(storedProducts));        
+        }
+    }
+    
 }
 
 document.addEventListener("load", GetProduct());
