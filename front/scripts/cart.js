@@ -138,6 +138,13 @@ function GetCart() {
 function UpdateTotal(storedProducts, productsPrice){
     let productsTotalNbr = 0 ;
     let productsTotalPrice = 0;
+    //Si on a pas de produits dans le localstorage => pas de total
+    if(storedProducts.length == 0){
+        let divTotal = document.getElementById("totalQuantity");
+        divTotal.innerText = "";  
+        let divTotalPrice = document.getElementById("totalPrice");
+        divTotalPrice.innerText = ""; 
+    }
     for(let i = 0; i < storedProducts.length; i++){
         //Récupérer le prix du produit dans notre array productsPrice
         let pPrice = productsPrice.find(price => price.pId == storedProducts[i].pId).pPrice;

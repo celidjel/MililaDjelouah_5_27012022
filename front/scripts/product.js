@@ -43,51 +43,58 @@ function GetProduct()
 
 function addToCart(){
 
-     let storedProducts = JSON.parse(localStorage.getItem("products")); // Récupérer la liste des produits présents dans le localstorage     
-
-    let selectColor = document.getElementById('colors');   // récupérer l'élément html select
-    let indexColor = selectColor.selectedIndex;  // récupérer l'index de l'option choisie
-
-    let color = selectColor[indexColor].value;  // récupérer la valeur de l'option choisie   
     let productQuantity = document.getElementById('quantity').value;
+    if(parseInt(productQuantity) > 0 && parseInt(productQuantity) <= 100)
+    {
+        let storedProducts = JSON.parse(localStorage.getItem("products")); // Récupérer la liste des produits présents dans le localstorage     
 
-    // Si on a pas selectionné la couleur et la quantité on ajoute pas le produit au panier
-    if(color !== "" &&  parseInt(productQuantity) > 0){
-        let product = {
-            pId : productId,       
-            pQuantity : productQuantity,
-            pColor : color        
-        };
+        let selectColor = document.getElementById('colors');   // récupérer l'élément html select
+        let indexColor = selectColor.selectedIndex;  // récupérer l'index de l'option choisie
+    
+        let color = selectColor[indexColor].value;  // récupérer la valeur de l'option choisie   
         
     
-        if(storedProducts === null)
-        {
-            let productsArray = [];
-            productsArray.push(product);
-            localStorage.setItem("products", JSON.stringify(productsArray)); // on stocke dans le localstorage
-        }
-        else
-        {  
-            let productExists = false;    
-            for(let i = 0 ; i < storedProducts.length ; i++)
-            {
-                if(product.pId === storedProducts[i].pId && product.pColor === storedProducts[i].pColor)
-                {
-                    storedProducts[i].pQuantity = parseInt(storedProducts[i].pQuantity) + parseInt(product.pQuantity);
-                    productExists = true;                
-                    break;
-                }
-            }  
+        // Si on a pas selectionné la couleur et la quantité on ajoute pas le produit au panier
+        if(color !== "" &&  parseInt(productQuantity) > 0){
+            let product = {
+                pId : productId,       
+                pQuantity : productQuantity,
+                pColor : color        
+            };
             
-            if(productExists === false)
+        
+            if(storedProducts === null)
             {
-                storedProducts.push(product);            
-            } 
-    
-            localStorage.setItem("products", JSON.stringify(storedProducts));        
-        }
+                let productsArray = [];
+                productsArray.push(product);
+                localStorage.setItem("products", JSON.stringify(productsArray)); // on stocke dans le localstorage
+            }
+            else
+            {  
+                let productExists = false;    
+                for(let i = 0 ; i < storedProducts.length ; i++)
+                {
+                    if(product.pId === storedProducts[i].pId && product.pColor === storedProducts[i].pColor)
+                    {
+                        storedProducts[i].pQuantity = parseInt(storedProducts[i].pQuantity) + parseInt(product.pQuantity);
+                        productExists = true;                
+                        break;
+                    }
+                }  
+                
+                if(productExists === false)
+                {
+                    storedProducts.push(product);            
+                } 
+        
+                localStorage.setItem("products", JSON.stringify(storedProducts));        
+            }
+        }          
     }
-    
+    else{
+        alert("Vous devez choisir une quantité 1-100");
+    }  
+         
 }
 
 document.addEventListener("load", GetProduct());
